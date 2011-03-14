@@ -11,7 +11,7 @@ django-ipgeobase - это приложение для определения р�
 
 Проделываем в командной строке ::
 
-  $ hg clone http://bitbucket.org/satels/django-ipgeobase/
+  $ git clone git://github.com/satels/django-ipgeobase.git
   $ cd django-ipgeobase
   $ python setup.py install
 
