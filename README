@@ -46,7 +46,7 @@ django-ipgeobase - это приложение для определения р�
       print ipgeobase.region #Регион (Свердловская область)
       print ipgeobase.city #Населенный пункт (Екатеринбург)
       print ipgeobase.ip_block #IP-блок, в который попали (212.49.98.0 - 212.49.98.255)
-      print ipgeobase.start, ipgeobase.end #IP-блок в числовом формате
+      print ipgeobase.start_ip, ipgeobase.end_ip #IP-блок в числовом формате
       print ipgeobase.latitude, ipgeobase.longitude #широта и долгота
 
 
