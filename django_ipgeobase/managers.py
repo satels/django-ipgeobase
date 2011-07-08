@@ -4,6 +4,7 @@ import socket
 import struct
 
 class IPGeoBaseManager(models.Manager):
+
     def by_ip(self, ip):
         """Отдает объекты для найденных соответствий по ip.
         Причем, наиболее точное совпадение в начале списка"""

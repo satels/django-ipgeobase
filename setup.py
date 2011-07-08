@@ -7,7 +7,7 @@ reload(sys).setdefaultencoding("UTF-8")
 
 setup(
     name='django-ipgeobase',
-    version='0.5.1',
+    version='1.0.0-beta',
     author='Ivan Petukhov',
     author_email='satels@gmail.com',
     packages=['django_ipgeobase', 'django_ipgeobase.management',

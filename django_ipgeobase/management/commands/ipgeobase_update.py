@@ -1,26 +1,24 @@
 #encoding:utf8
-from django.core.management.base import NoArgsCommand
-from django.db import connection, transaction
-from django_ipgeobase.conf import *
-from zipfile import ZipFile
-from urllib import urlopen
 from cStringIO import StringIO
 from django.core.mail import mail_admins
+from django.core.management.base import NoArgsCommand, CommandError
+from django.db import connection, transaction
+from django_ipgeobase.conf import IPGEOBASE_SOURCE_URL, IPGEOBASE_CODING, \
+    IPGEOBASE_SEND_MESSAGE_FOR_ERRORS
+from urllib import urlopen
+from zipfile import ZipFile
 
-DELETE_SQL = \
-"""
-DELETE FROM django_ipgeobase_ipgeobase
-"""
+DELETE_SQL = "DELETE FROM django_ipgeobase_ipgeobase"
 
-INSERT_SQL = \
-"""
+INSERT_SQL = """
 INSERT INTO django_ipgeobase_ipgeobase
-(ip_block, "start_ip", "end_ip", city, region, district, latitude, longitude)
-VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+("start_ip", "end_ip", ip_block, country, city, region, district, latitude, longitude)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
 """
 
 ERROR_SUBJECT = u"Error of command ipgeobase_update"
 send_message = IPGEOBASE_SEND_MESSAGE_FOR_ERRORS
+
 
 class Command(NoArgsCommand):
 
@@ -31,17 +29,16 @@ class Command(NoArgsCommand):
         f.close()
         print "Unpacking..."
         zip_file = ZipFile(buffer)
-        try:
-            file_read = zip_file.read(IPGEOBASE_FILENAME)
-        except KeyError:
-            message = "File %s in archive not found" % IPGEOBASE_FILENAME
-            if send_message:
-                mail_admins(subject=ERROR_SUBJECT, message=message)
-            return message
+        cities_file_read = _read_file(zip_file, 'cities.txt')
+        cidr_optim_file_read = _read_file(zip_file, 'cidr_optim.txt')
         zip_file.close()
         buffer.close()
         print "Start updating..."
-        lines = file_read.decode(IPGEOBASE_CODING).split('\n')
+        list_cities = cities_file_read.decode(IPGEOBASE_CODING).split('\n')
+        list_cidr_optim = \
+            cidr_optim_file_read.decode(IPGEOBASE_CODING).split('\n')
+        lines = \
+            _get_cidr_optim_with_cities_lines(list_cidr_optim, list_cities)
         cursor = connection.cursor()
         transaction.enter_transaction_management()
         try:
@@ -49,15 +46,41 @@ class Command(NoArgsCommand):
             print "Delete old rows in table ipgeobase..."
             cursor.execute(DELETE_SQL)
             print "Write new data..."
-            cursor.executemany(INSERT_SQL,
-                               [l.split('\t') for l in lines if l.strip()])
+            cursor.executemany(INSERT_SQL, [l for l in lines if l])
             transaction.commit()
         except Exception, e:
             message = "The data not updated:", e
             if send_message:
                 mail_admins(subject=ERROR_SUBJECT, message=message)
-            return message
+            raise CommandError, message
         finally:
             transaction.rollback()
             transaction.leave_transaction_management()
         return "Table ipgeobase is update.\n"
+
+def _read_file(zip_file, filename):
+    try:
+        file_read = zip_file.read(filename)
+    except KeyError:
+        message = "File %s in archive does not found" % filename
+        if send_message:
+            mail_admins(subject=ERROR_SUBJECT, message=message)
+        raise CommandError, message
+    return file_read
+
+def _get_cidr_optim_with_cities_lines(list_cidr_optim, list_cities):
+    injector = {}
+    for line in list_cities:
+        row = line.split('\t')
+        city_id = row[0]
+        injector[city_id] = row[1:]
+    for i, line in enumerate(list_cidr_optim):
+        row = line.split('\t')
+        city_id = row[-1]
+        row = row[:-1]
+        if not row:
+            continue
+        city_row = injector.get(city_id)
+        city_row = city_row or [None]*5
+        list_cidr_optim[i] = row + city_row
+    return list_cidr_optim

@@ -1,5 +1,20 @@
 История изменений
 =================
+1.0.0-beta
+-----
+Переведено приложение на обновленную базу http://ipgeobase.ru/files/db/Main/geo_files.tar.gz.
+Для переход на новую версию нужно выполнить:
+./manage.py dbshell
+ALTER TABLE django_ipgeobase_ipgeobase add country varchar(16) NOT NULL DEFAULT 'RU';
+Изменить колонки district, region, city, latitude, longitude - убрать NOT NULL
+Например, для PostgreSQL
+ALTER TABLE django_ipgeobase_ipgeobase ALTER district DROP NOT NULL;
+ALTER TABLE django_ipgeobase_ipgeobase ALTER region DROP NOT NULL;
+ALTER TABLE django_ipgeobase_ipgeobase ALTER city DROP NOT NULL;
+ALTER TABLE django_ipgeobase_ipgeobase ALTER latitude DROP NOT NULL;
+ALTER TABLE django_ipgeobase_ipgeobase ALTER longitude DROP NOT NULL;
+После этого запустить скрипт обновления данных 
+./manage.py ipgeobase_update
 
 0.5.0
 -----
