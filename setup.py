@@ -19,7 +19,7 @@ setup(
     long_description = open('README').read().decode('utf8'),
 
     classifiers=(
-        'Development Status :: 1',
+        'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
