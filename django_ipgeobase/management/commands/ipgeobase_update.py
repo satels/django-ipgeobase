@@ -12,7 +12,7 @@ DELETE_SQL = "DELETE FROM django_ipgeobase_ipgeobase"
 
 INSERT_SQL = """
 INSERT INTO django_ipgeobase_ipgeobase
-("start_ip", "end_ip", ip_block, country, city, region, district, latitude, longitude)
+(start_ip, end_ip, ip_block, country, city, region, district, latitude, longitude)
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
 """
 
