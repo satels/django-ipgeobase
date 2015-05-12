@@ -7,7 +7,7 @@ reload(sys).setdefaultencoding("UTF-8")
 
 setup(
     name='django-ipgeobase',
-    version='1.0.0-beta',
+    version='1.0.1-beta',
     author='Ivan Petukhov',
     author_email='satels@gmail.com',
     packages=['django_ipgeobase', 'django_ipgeobase.management',
@@ -17,6 +17,7 @@ setup(
     license = 'MIT license',
     description = u'Приложение для работы с базой ipgeobase.ru.'.encode('utf8'),
     long_description = open('README.rst').read().decode('utf8'),
+    install_requires = ['Django >= 1.6'],
 
     classifiers=(
         'Development Status :: 4 - Beta',
