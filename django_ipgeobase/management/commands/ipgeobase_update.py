@@ -42,20 +42,17 @@ class Command(NoArgsCommand):
         cursor = connection.cursor()
         transaction.enter_transaction_management()
         try:
-            transaction.managed(True)
-            print "Delete old rows in table ipgeobase..."
-            cursor.execute(DELETE_SQL)
-            print "Write new data..."
-            cursor.executemany(INSERT_SQL, [l for l in lines if l])
-            transaction.commit()
+            with transaction.atomic():
+                transaction.managed(True)
+                print "Delete old rows in table ipgeobase..."
+                cursor.execute(DELETE_SQL)
+                print "Write new data..."
+                cursor.executemany(INSERT_SQL, [l for l in lines if l])
         except Exception, e:
             message = "The data not updated:", e
             if send_message:
                 mail_admins(subject=ERROR_SUBJECT, message=message)
             raise CommandError, message
-        finally:
-            transaction.rollback()
-            transaction.leave_transaction_management()
         return "Table ipgeobase is update.\n"
 
 def _read_file(zip_file, filename):
