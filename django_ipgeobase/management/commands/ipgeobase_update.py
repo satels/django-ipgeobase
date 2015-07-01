@@ -42,7 +42,6 @@ class Command(NoArgsCommand):
         cursor = connection.cursor()
         try:
             with transaction.atomic():
-                transaction.managed(True)
                 print "Delete old rows in table ipgeobase..."
                 cursor.execute(DELETE_SQL)
                 print "Write new data..."
