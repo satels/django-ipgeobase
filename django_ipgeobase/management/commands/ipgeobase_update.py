@@ -40,7 +40,6 @@ class Command(NoArgsCommand):
         lines = \
             _get_cidr_optim_with_cities_lines(list_cidr_optim, list_cities)
         cursor = connection.cursor()
-        transaction.enter_transaction_management()
         try:
             with transaction.atomic():
                 transaction.managed(True)
