@@ -40,19 +40,26 @@ class Command(NoArgsCommand):
         lines = \
             _get_cidr_optim_with_cities_lines(list_cidr_optim, list_cities)
         cursor = connection.cursor()
-        try:
-            with transaction.atomic():
-                print "Delete old rows in table ipgeobase..."
-                cursor.execute(DELETE_SQL)
-                print "Write new data..."
-                cursor.executemany(INSERT_SQL, [l for l in lines if l])
-        except Exception, e:
-            message = "The data not updated:", e
-            if send_message:
-                mail_admins(subject=ERROR_SUBJECT, message=message)
-            raise CommandError, message
+        if hasattr(transaction, 'atomic'):
+            # django >= 1.6
+            try:
+                with transaction.atomic():
+                    _execute_sql(cursor, lines)
+            except Exception, e:
+                _handle_error(e)
+        else:
+            # django < 1.6
+            transaction.enter_transaction_management()
+            try:
+                transaction.managed(True)
+                _execute_sql(cursor, lines)
+                transaction.commit()
+            except Exception, e:
+                _handle_error(e)
+            finally:
+                transaction.rollback()
+                transaction.leave_transaction_management()
         return "Table ipgeobase is update.\n"
-
 def _read_file(zip_file, filename):
     try:
         file_read = zip_file.read(filename)
@@ -79,3 +86,15 @@ def _get_cidr_optim_with_cities_lines(list_cidr_optim, list_cities):
         city_row = city_row or [None]*5
         list_cidr_optim[i] = row + city_row
     return list_cidr_optim
+
+def _execute_sql(cursor, lines):
+    print "Delete old rows in table ipgeobase..."
+    cursor.execute(DELETE_SQL)
+    print "Write new data..."
+    cursor.executemany(INSERT_SQL, [l for l in lines if l])
+
+def _handle_error(e):
+    message = "The data not updated:", e
+    if send_message:
+        mail_admins(subject=ERROR_SUBJECT, message=message)
+    raise CommandError, message
