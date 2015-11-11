@@ -17,7 +17,6 @@ setup(
     license = 'MIT license',
     description = u'Приложение для работы с базой ipgeobase.ru.'.encode('utf8'),
     long_description = open('README.rst').read().decode('utf8'),
-    install_requires = ['Django >= 1.6'],
 
     classifiers=(
         'Development Status :: 4 - Beta',
