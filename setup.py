@@ -7,19 +7,19 @@ reload(sys).setdefaultencoding("UTF-8")
 
 setup(
     name='django-ipgeobase',
-    version='1.0.2-beta',
+    version='1.0.3',
     author='Ivan Petukhov',
     author_email='satels@gmail.com',
     packages=['django_ipgeobase', 'django_ipgeobase.management',
               'django_ipgeobase.management.commands'],
     url='https://github.com/satels/django-ipgeobase',
-    download_url = 'https://github.com/satels/django-ipgeobase/zipball/master',
-    license = 'MIT license',
-    description = u'Приложение для работы с базой ipgeobase.ru.'.encode('utf8'),
-    long_description = open('README.rst').read().decode('utf8'),
+    download_url='https://github.com/satels/django-ipgeobase/zipball/master',
+    license='MIT license',
+    description='Приложение для работы с базой ipgeobase.ru.'.encode('utf8'),
+    long_description=open('README.rst').read().decode('utf8'),
 
     classifiers=(
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
