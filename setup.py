@@ -3,7 +3,9 @@
 from distutils.core import setup
 
 import sys
-reload(sys).setdefaultencoding("UTF-8")
+
+if sys.version_info < (3, 0, 0):
+    reload(sys).setdefaultencoding("UTF-8")
 
 setup(
     name='django-ipgeobase',
