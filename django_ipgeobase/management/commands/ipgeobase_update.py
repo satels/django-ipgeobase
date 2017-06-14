@@ -1,4 +1,5 @@
 # coding: utf-8
+from __future__ import print_function, unicode_literals
 from cStringIO import StringIO
 from django.core.mail import mail_admins
 from django.core.management.base import NoArgsCommand, CommandError
@@ -23,17 +24,17 @@ send_message = IPGEOBASE_SEND_MESSAGE_FOR_ERRORS
 class Command(NoArgsCommand):
 
     def handle(self, *args, **options):
-        print "Download zip-archive..."
+        print("Download zip-archive...")
         f = urlopen(IPGEOBASE_SOURCE_URL)
         buffer = StringIO(f.read())
         f.close()
-        print "Unpacking..."
+        print("Unpacking...")
         zip_file = ZipFile(buffer)
         cities_file_read = _read_file(zip_file, 'cities.txt')
         cidr_optim_file_read = _read_file(zip_file, 'cidr_optim.txt')
         zip_file.close()
         buffer.close()
-        print "Start updating..."
+        print("Start updating...")
         list_cities = cities_file_read.decode(IPGEOBASE_CODING).split('\n')
         list_cidr_optim = \
             cidr_optim_file_read.decode(IPGEOBASE_CODING).split('\n')
@@ -89,9 +90,9 @@ def _get_cidr_optim_with_cities_lines(list_cidr_optim, list_cities):
     return list_cidr_optim
 
 def _execute_sql(cursor, lines):
-    print "Delete old rows in table ipgeobase..."
+    print("Delete old rows in table ipgeobase...")
     cursor.execute(DELETE_SQL)
-    print "Write new data..."
+    print("Write new data...")
     cursor.executemany(INSERT_SQL, [l for l in lines if l])
 
 def _handle_error(e):
