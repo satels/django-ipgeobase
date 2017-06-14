@@ -1,4 +1,4 @@
-#encoding:utf8
+# coding: utf-8
 from cStringIO import StringIO
 from django.core.mail import mail_admins
 from django.core.management.base import NoArgsCommand, CommandError
@@ -60,6 +60,7 @@ class Command(NoArgsCommand):
                 transaction.rollback()
                 transaction.leave_transaction_management()
         return "Table ipgeobase is update.\n"
+
 def _read_file(zip_file, filename):
     try:
         file_read = zip_file.read(filename)

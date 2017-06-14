@@ -4,9 +4,6 @@ django-ipgeobase
 
 django-ipgeobase - это приложение для определения региона (а также широты и долготы) в России по IP в Django
 
-.. image:: https://pypip.in/d/django-ipgeobase/badge.png
-    :target: https://crate.io/packages/django-ipgeobase/
-
 Установка
 =========
 
