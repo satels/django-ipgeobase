@@ -4,8 +4,15 @@ from distutils.core import setup
 
 import sys
 
-if sys.version_info < (3, 0, 0):
+is_py2 = sys.version_info < (3, 0, 0)
+
+if is_py2:
     reload(sys).setdefaultencoding("UTF-8")
+
+long_description = open('README.rst').read()
+
+if is_py2:
+    long_description = long_description.decode('utf8')
 
 setup(
     name='django-ipgeobase',
@@ -18,7 +25,7 @@ setup(
     download_url='https://github.com/satels/django-ipgeobase/zipball/master',
     license='MIT license',
     description='Приложение для работы с базой ipgeobase.ru.'.encode('utf8'),
-    long_description=open('README.rst').read().decode('utf8'),
+    long_description=long_description,
 
     classifiers=(
         'Development Status :: 5 - Production/Stable',
