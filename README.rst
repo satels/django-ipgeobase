@@ -16,11 +16,18 @@ django-ipgeobase - это приложение для определения р�
 
 Потом следует добавить 'django_ipgeobase' в INSTALLED_APPS и выполнить ::
 
-  $ python manage.py syncdb
+  $ python manage.py syncdb  # Django < 1.7
+  $ python manage.py migrate django_ipgeobase  # Django >= 1.7
 
 
 Настройка
 =========
+
+  INSTALLED_APPS = [
+      ..
+      'django_ipgeobase',
+      ..
+  ]
 
 Необязательные параметры (в settings.py):
 
@@ -34,6 +41,7 @@ django-ipgeobase - это приложение для определения р�
 
 Для получения объекта ipgeobase (для определения региона) ::
 
+  from __future__ import print_function, unicode_literals
   from django_ipgeobase.models import IPGeoBase
 
   ip = "212.49.98.48"
@@ -41,13 +49,13 @@ django-ipgeobase - это приложение для определения р�
   ipgeobases = IPGeoBase.objects.by_ip(ip)
   if ipgeobases.exists():
       ipgeobase = ipgeobases[0]
-      print ipgeobase.country #Страна
-      print ipgeobase.district #Округ (для указанного ip - Уральский)
-      print ipgeobase.region #Регион (Свердловская область)
-      print ipgeobase.city #Населенный пункт (Екатеринбург)
-      print ipgeobase.ip_block #IP-блок, в который попали (212.49.98.0 - 212.49.98.255)
-      print ipgeobase.start_ip, ipgeobase.end_ip #IP-блок в числовом формате
-      print ipgeobase.latitude, ipgeobase.longitude #широта и долгота
+      print(ipgeobase.country)  # 'RU' - Страна
+      print(ipgeobase.district)  # Округ (для указанного ip - Уральский федеральный округ)
+      print(ipgeobase.region)  # Регион (Свердловская область)
+      print(ipgeobase.city)  # Населенный пункт (Екатеринбург)
+      print(ipgeobase.ip_block)  # IP-блок, в который попали (212.49.96.0 - 212.49.127.255)
+      print(ipgeobase.start_ip, ipgeobase.end_ip)  # (3560005632, 3560013823), IP-блок в числовом формате
+      print(ipgeobase.latitude, ipgeobase.longitude)  # (56.837814, 60.596844), широта и долгота
 
 
 Обновления базы
