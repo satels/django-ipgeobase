@@ -75,7 +75,7 @@ def _read_file(zip_file, filename):
     try:
         file_read = zip_file.read(filename)
     except KeyError:
-        message = "File %s in archive does not found" % filename
+        message = "File {} in archive does not found".format(filename)
         if send_message:
             mail_admins(subject=ERROR_SUBJECT, message=message)
         raise CommandError(message)
@@ -99,13 +99,13 @@ def _get_cidr_optim_with_cities_lines(list_cidr_optim, list_cities):
     return list_cidr_optim
 
 def _execute_sql(cursor, lines):
-    print("Delete old rows in table ipgeobase...")
-    cursor.execute(DELETE_SQL)
+    print("Delete (truncate) old rows in table ipgeobase...")
+    cursor.execute(TRUNCATE_SQL)
     print("Write new data...")
     cursor.executemany(INSERT_SQL, [l for l in lines if l])
 
 def _handle_error(e):
-    message = "The data not updated:", e
+    message = "The data not updated: {}".format(e)
     if send_message:
         mail_admins(subject=ERROR_SUBJECT, message=message)
     raise CommandError(message)
