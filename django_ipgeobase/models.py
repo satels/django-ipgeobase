@@ -67,6 +67,9 @@ class IPGeoBase(models.Model):
     objects = IPGeoBaseManager()
 
     class Meta:
+        index_together = [
+            ('start_ip', 'end_ip'),
+        ]
         unique_together = [
             ('start_ip', 'end_ip'),
         ]
