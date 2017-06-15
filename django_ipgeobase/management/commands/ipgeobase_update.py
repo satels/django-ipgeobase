@@ -22,8 +22,8 @@ TRUNCATE_SQL = "TRUNCATE django_ipgeobase_ipgeobase"
 
 INSERT_SQL = """
 INSERT INTO django_ipgeobase_ipgeobase
-(start_ip, end_ip, ip_block, country, city, region, district, latitude, longitude)
-VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+(start_ip, end_ip, ip_block, country, city, region, district, latitude, longitude, city_id)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
 """
 
 ERROR_SUBJECT = "Error of command ipgeobase_update"
@@ -90,12 +90,14 @@ def _get_cidr_optim_with_cities_lines(list_cidr_optim, list_cities):
     for i, line in enumerate(list_cidr_optim):
         row = line.split('\t')
         city_id = row[-1]
+        if city_id == '-':
+            city_id = None
         row = row[:-1]
         if not row:
             continue
         city_row = injector.get(city_id)
         city_row = city_row or [None]*5
-        list_cidr_optim[i] = row + city_row
+        list_cidr_optim[i] = row + city_row + [city_id]
     return list_cidr_optim
 
 def _execute_sql(cursor, lines):

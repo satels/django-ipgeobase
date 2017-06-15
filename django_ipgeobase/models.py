@@ -37,6 +37,11 @@ class IPGeoBase(models.Model):
             "данному блоку"
         ),
     )
+    city_id = models.IntegerField(
+        verbose_name='Ipgeobase Id Города',
+        null=True,
+        help_text="Внутренний Ipgeobase Id Города",
+    )
     region = models.CharField(
         verbose_name='Регион',
         max_length=255,
