@@ -18,7 +18,7 @@ except ImportError:
         return urlopen_py3(Request(url))
 from zipfile import ZipFile
 
-DELETE_SQL = "DELETE FROM django_ipgeobase_ipgeobase"
+TRUNCATE_SQL = "TRUNCATE django_ipgeobase_ipgeobase"
 
 INSERT_SQL = """
 INSERT INTO django_ipgeobase_ipgeobase
