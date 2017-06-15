@@ -16,7 +16,7 @@ django-ipgeobase - это приложение для определения р�
 
 Или версионированно ::
 
-  $ pip install django-ipgeobase==1.0.3
+  $ pip install django-ipgeobase==1.0.4
 
 
 Потом следует добавить 'django_ipgeobase' в INSTALLED_APPS и выполнить ::
