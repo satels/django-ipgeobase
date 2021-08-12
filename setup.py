@@ -25,7 +25,7 @@ setup(
     url='https://github.com/satels/django-ipgeobase',
     download_url='https://github.com/satels/django-ipgeobase/zipball/master',
     license='MIT license',
-    description='Приложение для работы с базой ipgeobase.ru.'.encode('utf8'),
+    description='Приложение для работы с базой ipgeobase.ru.',
     long_description=long_description,
 
     classifiers=(
